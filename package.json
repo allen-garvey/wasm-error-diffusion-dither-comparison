@@ -1,0 +1,37 @@
+{
+  "name": "wasm-error-propagation-dither-comparison",
+  "version": "1.0.0",
+  "description": "A comparison or error propagation dither performance between JavaScript and WebAssembly generated via C, D, Rust and Zig.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack serve --config webpack.config.js",
+    "build": "webpack --config webpack.config.js",
+    "deploy": "webpack --config webpack.config.js --mode='production'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allen-garvey/wasm-error-propagation-dither-comparison.git"
+  },
+  "author": "Allen Garvey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/allen-garvey/wasm-error-propagation-dither-comparison/issues"
+  },
+  "homepage": "https://github.com/allen-garvey/wasm-error-propagation-dither-comparison#readme",
+  "dependencies": {
+    "vue": "^3.2.33"
+  },
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.33",
+    "css-loader": "^6.7.1",
+    "mini-css-extract-plugin": "^2.6.0",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^12.6.0",
+    "vue-loader": "^17.0.0",
+    "vue-style-loader": "^4.1.3",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1"
+  }
+}
