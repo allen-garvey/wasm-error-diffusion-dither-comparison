@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.container">
-        <div>
+        <div v-if="!isLoading">
             <input 
                 type="file" 
                 accept="image/png,image/gif,image/jpeg,image/webp"
@@ -36,13 +36,15 @@ export default {
     components: {
     },
     created(){
-        // create webworker
+        this.ditherWorker = new Worker(new URL('../worker/worker.js', import.meta.url));
+        this.ditherWorker.onmessage = this.onWorkerMessageReceived;
     },
     mounted(){
         this.canvasContext = this.$refs.outputCanvas.getContext('2d');
     },
     data(){
         return {
+            isLoading: true,
             currentImageObjectUrl: null,
             imageWidth: 0,
             imageHeight: 0,
@@ -77,12 +79,19 @@ export default {
 			Canvas.clear(this.canvasContext);
 			Canvas.loadImage(this.$refs.outputCanvas, this.canvasContext, this.$refs.image);
             const pixels = new Uint8ClampedArray(this.canvasContext.getImageData(0, 0, this.imageWidth, this.imageHeight).data.buffer);
-			// this.ditherWorker.postMessage({
-            //     type: messageHeaders.IMAGE_LOAD,
-            //     width: this.imageWidth,
-            //     height: this.imageHeight,
-            //     pixels,
-            // }, [pixels.buffer]);
+			this.ditherWorker.postMessage({
+                type: messageHeaders.IMAGE_LOAD,
+                width: this.imageWidth,
+                height: this.imageHeight,
+                pixels,
+            }, [pixels.buffer]);
+        },
+        onWorkerMessageReceived(event){
+            switch(event.data.type){
+                case messageHeaders.WORKER_READY:
+                    this.isLoading = false;
+                    break;
+            }
         },
     }
 };
