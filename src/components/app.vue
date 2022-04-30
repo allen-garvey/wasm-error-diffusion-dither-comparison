@@ -6,6 +6,27 @@
                 accept="image/png,image/gif,image/jpeg,image/webp"
                 @change.prevent="fileLoaded"
             />
+            <label>
+                Language
+                <select
+                    v-model="ditherLanguage"
+                >
+                    <option 
+                        v-for="option in ditherDropdownModel"
+                        :key="option.value"
+                        :value="option.value"
+                    >
+                        {{ option.title }}
+                    </option>
+                </select>
+            </label>
+            <button
+                v-if="isImageLoaded"
+                @click="dither"
+                :disabled="isDithering"
+            >
+                Dither
+            </button>
             <img
                 v-show="false"
                 ref="image"
@@ -30,6 +51,7 @@
 
 <script>
 import messageHeaders from '../message-headers';
+import ditherDropdownModel from '../dom/dither-dropdown-model';
 import Canvas from '../dom/canvas';
 
 export default {
@@ -50,9 +72,17 @@ export default {
             imageHeight: 0,
             canvasContext: null,
             ditherWorker: null,
+            ditherLanguage: ditherDropdownModel[0].value,
+            isDithering: false,
         };
     },
     computed: {
+        ditherDropdownModel(){
+            return ditherDropdownModel;
+        },
+        isImageLoaded(){
+            return !!this.currentImageObjectUrl;
+        },
     },
     watch: {
     },
@@ -85,6 +115,16 @@ export default {
                 height: this.imageHeight,
                 pixels,
             }, [pixels.buffer]);
+            this.dither();
+        },
+        dither(){
+            if(this.isDithering){
+                return;
+            }
+            this.isDithering = true;
+            this.ditherWorker.postMessage({
+                type: this.ditherLanguage,
+            });
         },
         onWorkerMessageReceived(event){
             switch(event.data.type){
