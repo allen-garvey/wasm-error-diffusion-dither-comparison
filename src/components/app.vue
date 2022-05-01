@@ -134,6 +134,7 @@ export default {
         onDitherResultsReceived(results){
             Canvas.draw(this.canvasContext, this.imageWidth, this.imageHeight, results.pixels);
             this.timeElapsed = results.timeElapsed;
+            this.isDithering = false;
         },
         onWorkerMessageReceived(event){
             switch(event.data.type){
