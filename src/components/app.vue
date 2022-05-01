@@ -126,10 +126,16 @@ export default {
                 type: this.ditherLanguage,
             });
         },
+        onDitherResultsReceived(results){
+            Canvas.draw(this.canvasContext, this.imageWidth, this.imageHeight, results.pixels);
+        },
         onWorkerMessageReceived(event){
             switch(event.data.type){
                 case messageHeaders.WORKER_READY:
                     this.isLoading = false;
+                    break;
+                case messageHeaders.DITHER_RESULTS:
+                    this.onDitherResultsReceived(event.data);
                     break;
             }
         },

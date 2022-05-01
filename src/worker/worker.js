@@ -1,4 +1,5 @@
 import messageHeaders from '../message-headers';
+import { dither } from '../dither/dither';
 
 let pixels =        null;
 let imageHeight =   0;
@@ -12,6 +13,14 @@ onmessage = event => {
             pixels = data.pixels;
             imageHeight = data.height;
             imageWidth = data.width;
+            break;
+        case messageHeaders.DITHER_JS:
+            const ditherJsResults = dither(pixels, imageWidth, imageHeight);
+            postMessage({
+                type: messageHeaders.DITHER_RESULTS,
+                language: messageHeaders.DITHER_JS,
+                pixels: ditherJsResults.ditheredPixels,
+            }, [ditherJsResults.ditheredPixels.buffer]);
             break;
     }
 };
