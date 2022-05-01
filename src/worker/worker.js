@@ -18,9 +18,8 @@ onmessage = event => {
             const ditherJsResults = dither(pixels, imageWidth, imageHeight);
             postMessage({
                 type: messageHeaders.DITHER_RESULTS,
-                language: messageHeaders.DITHER_JS,
-                pixels: ditherJsResults.ditheredPixels,
-            }, [ditherJsResults.ditheredPixels.buffer]);
+                ...ditherJsResults,
+            }, [ditherJsResults.pixels.buffer]);
             break;
     }
 };

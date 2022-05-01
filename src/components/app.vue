@@ -33,6 +33,7 @@
                 @load.prevent="imageLoaded"
                 :src="currentImageObjectUrl || ''"
             />
+            <div v-if="timeElapsed">Megapixels per second: {{ imageMegapixels / timeElapsed }}</div>
         </div>
         <div>
             <canvas 
@@ -74,6 +75,7 @@ export default {
             ditherWorker: null,
             ditherLanguage: ditherDropdownModel[0].value,
             isDithering: false,
+            timeElapsed: 0,
         };
     },
     computed: {
@@ -82,6 +84,9 @@ export default {
         },
         isImageLoaded(){
             return !!this.currentImageObjectUrl;
+        },
+        imageMegapixels(){
+            return this.imageHeight * this.imageWidth / 1000000;
         },
     },
     watch: {
@@ -128,6 +133,7 @@ export default {
         },
         onDitherResultsReceived(results){
             Canvas.draw(this.canvasContext, this.imageWidth, this.imageHeight, results.pixels);
+            this.timeElapsed = results.timeElapsed;
         },
         onWorkerMessageReceived(event){
             switch(event.data.type){

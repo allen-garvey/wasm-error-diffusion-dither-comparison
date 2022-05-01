@@ -16,6 +16,7 @@ export const dither = (pixels, imageWidth, imageHeight) => {
     let row2 = new Int16Array(errorDiffusionWidth);
     let row3 = new Int16Array(errorDiffusionWidth);
 
+    const startTime = performance.now();
     for(let y=0,offset=0; y<imageHeight; y++,offset+=PIXEL_LENGTH){
         for(let x=0,pixelIndex=offset,errorIndex=2;x<imageWidth;x++,pixelIndex+=4,errorIndex++){
             const storedError = row1[errorIndex];
@@ -53,7 +54,9 @@ export const dither = (pixels, imageWidth, imageHeight) => {
         row2 = row3;
         row3 = temp;
     }
+    const timeElapsed = (performance.now() - startTime) / 1000;
     return {
-        ditheredPixels,
+        pixels: ditheredPixels,
+        timeElapsed,
     };
 };
