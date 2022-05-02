@@ -8,7 +8,7 @@ const calculateLightness = (r, g, b) => {
 // dither with stucki dithering algorithm 
 // https://tannerhelland.com/2012/12/28/dithering-eleven-algorithms-source-code.html#stucki-dithering
 export const dither = (pixels, imageWidth, imageHeight) => {
-    const ditheredPixels = new Uint8ClampedArray(pixels.length).fill(255);
+    const ditheredPixels = pixels.slice().fill(255);
     // add 2 to beginning and end so we don't need to do bounds checks
     const errorDiffusionWidth = imageWidth + 4;
     let errorRow1 = new Int16Array(errorDiffusionWidth);
