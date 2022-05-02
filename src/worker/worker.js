@@ -1,6 +1,7 @@
 import messageHeaders from '../message-headers';
 import { dither } from './dither';
 import { ditherWasm } from './ditherWasm';
+import wasm from './wasm';
 
 let pixels =        null;
 let imageHeight =   0;
@@ -38,17 +39,7 @@ onmessage = event => {
     }
 };
 
-Promise.all([
-    {
-        key: messageHeaders.DITHER_D,
-        source: 'd',
-    },
-].map(({key, source}) =>
-    WebAssembly.instantiateStreaming(fetch(`/assets/${source}.wasm`), {})
-        .then(obj => {
-            wasmDithers[key] = obj.instance.exports.dither;
-        })
-)).then(() => {
+wasm.initialize(wasmDithers).then(() => {
     postMessage({
         type: messageHeaders.WORKER_READY,
     });
