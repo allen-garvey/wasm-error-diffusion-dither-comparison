@@ -1,13 +1,15 @@
-export const ditherWasm = (ditherFunc, pixels, imageWidth, imageHeight) => {
-    const ditheredPixels = pixels.slice();
-    const errorArray = new Int16Array((imageWidth + 4) * 3);
+export const ditherWasm = (wasmExports, pixels, imageWidth, imageHeight) => {
+    const ditheredPixels = new Uint8ClampedArray(wasmExports.memory.buffer, 0, pixels.length);
+    ditheredPixels.set(pixels);
+    const errorArray = new Int16Array(wasmExports.memory.buffer, pixels.length, (imageWidth + 4) * 3);
+    errorArray.fill(0);
 
     const startTime = performance.now();
-    ditherFunc(ditheredPixels.buffer, imageWidth, imageHeight, errorArray.buffer);
+    wasmExports.dither(0, imageWidth, imageHeight, pixels.buffer.byteLength);
     const timeElapsed = (performance.now() - startTime) / 1000;
 
     return {
-        pixels: ditheredPixels,
+        pixels: ditheredPixels.slice(),
         timeElapsed,
     };
 };
