@@ -15,6 +15,9 @@ onmessage = event => {
             pixels = data.pixels;
             imageHeight = data.height;
             imageWidth = data.width;
+            postMessage({
+                type: messageHeaders.WORKER_IMAGE_LOADED,
+            });
             break;
         case messageHeaders.DITHER_JS:
             const ditherJsResults = dither(pixels, imageWidth, imageHeight);

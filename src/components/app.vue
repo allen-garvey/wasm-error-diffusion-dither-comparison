@@ -10,6 +10,7 @@
                 Language
                 <select
                     v-model="ditherLanguage"
+                    :disabled="isWorkerBusy"
                 >
                     <option 
                         v-for="option in ditherDropdownModel"
@@ -23,7 +24,7 @@
             <button
                 v-if="isImageLoaded"
                 @click="dither"
-                :disabled="isDithering"
+                :disabled="isWorkerBusy"
             >
                 Dither
             </button>
@@ -74,7 +75,7 @@ export default {
             canvasContext: null,
             ditherWorker: null,
             ditherLanguage: ditherDropdownModel[0].value,
-            isDithering: false,
+            isWorkerBusy: false,
             timeElapsed: 0,
         };
     },
@@ -120,13 +121,13 @@ export default {
                 height: this.imageHeight,
                 pixels,
             }, [pixels.buffer]);
-            this.dither();
+            this.isWorkerBusy = true;
         },
         dither(){
-            if(this.isDithering){
+            if(this.isWorkerBusy){
                 return;
             }
-            this.isDithering = true;
+            this.isWorkerBusy = true;
             this.ditherWorker.postMessage({
                 type: this.ditherLanguage,
             });
@@ -134,12 +135,16 @@ export default {
         onDitherResultsReceived(results){
             Canvas.draw(this.canvasContext, this.imageWidth, this.imageHeight, results.pixels);
             this.timeElapsed = results.timeElapsed;
-            this.isDithering = false;
+            this.isWorkerBusy = false;
         },
         onWorkerMessageReceived(event){
             switch(event.data.type){
                 case messageHeaders.WORKER_READY:
                     this.isLoading = false;
+                    break;
+                case messageHeaders.WORKER_IMAGE_LOADED:
+                    this.isWorkerBusy = false;
+                    this.dither();
                     break;
                 case messageHeaders.DITHER_RESULTS:
                     this.onDitherResultsReceived(event.data);
