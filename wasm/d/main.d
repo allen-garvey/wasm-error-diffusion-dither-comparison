@@ -1,28 +1,28 @@
 //main entry point
 extern(C): // disable D mangling
 
-private ubyte max(ubyte v1, ubyte v2, ubyte v3)
+ubyte max(ubyte v1, ubyte v2, ubyte v3)
 {
     if (v1 > v2)
         return v1 > v3 ? v1 : v3;
     return v2 > v3 ? v2 : v3;
 }
 
-private ubyte min(ubyte v1, ubyte v2, ubyte v3)
+ubyte min(ubyte v1, ubyte v2, ubyte v3)
 {
     if (v1 < v2)
         return v1 < v3 ? v1 : v3;
     return v2 < v3 ? v2 : v3;
 }
 
-private ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
+ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
 {
     const maxValue = max(r, g, b);
     const minValue = min(r, g, b);
     return (maxValue + minValue) / 2;
 }
 
-private short round(float f)
+short round(float f)
 {
     short lower = cast(short) f;
     const error = f - lower;
