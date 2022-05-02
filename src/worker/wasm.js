@@ -1,17 +1,31 @@
 import messageHeaders from '../message-headers';
 
-const initializeWasm = (memo) => Promise.all([
+const wasmModel = [
     {
         key: messageHeaders.DITHER_D,
         source: 'd',
     },
-].map(({key, source}) =>
-    WebAssembly.instantiateStreaming(fetch(`/assets/${source}.wasm`), {})
-        .then(obj => {
-            memo[key] = obj.instance.exports.dither;
+];
+
+const initializeWasm = (memo) => Promise.all(wasmModel.map(({key, source}) =>
+    WebAssembly.compileStreaming(fetch(`/assets/${source}.wasm`))
+        .then(module => {
+            memo[key] = {
+                module,
+            };
         })
 ));
 
+const instantiateWasm = (memo) => Promise.all(Object.keys(memo).map((key) => {
+    const model = memo[key];
+
+    return WebAssembly.instantiate(model.module, {})
+        .then((instance) => {
+            model.instance = instance;
+        });
+}));
+
 export default {
     initialize:initializeWasm,
+    instantiate: instantiateWasm,
 };

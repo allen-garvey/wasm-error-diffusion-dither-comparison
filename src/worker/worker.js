@@ -16,8 +16,10 @@ onmessage = event => {
             pixels = data.pixels;
             imageHeight = data.height;
             imageWidth = data.width;
-            postMessage({
-                type: messageHeaders.WORKER_IMAGE_LOADED,
+            wasm.instantiate(wasmDithers).then(() => {
+                postMessage({
+                    type: messageHeaders.WORKER_IMAGE_LOADED,
+                });
             });
             break;
         case messageHeaders.DITHER_JS:
@@ -29,7 +31,7 @@ onmessage = event => {
             }, [ditherJsResults.pixels.buffer]);
             break;
         case messageHeaders.DITHER_D:
-            const ditherWasmResults = ditherWasm(wasmDithers[data.type], pixels, imageWidth, imageHeight);
+            const ditherWasmResults = ditherWasm(wasmDithers[data.type].instance.exports.dither, pixels, imageWidth, imageHeight);
             postMessage({
                 type: messageHeaders.DITHER_RESULTS,
                 language: data.type,
