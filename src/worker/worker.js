@@ -1,5 +1,5 @@
 import messageHeaders from '../message-headers';
-import { dither } from '../dither/dither';
+import { dither } from './dither';
 
 let pixels =        null;
 let imageHeight =   0;
