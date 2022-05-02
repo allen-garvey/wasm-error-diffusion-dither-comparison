@@ -105,12 +105,14 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
 version(WebAssembly){
     void __assert(const(char)* msg, const(char)* file, uint line) {}
 
-    void memset(short* a, short value, size_t n)
+    short* memset(short* a, short value, size_t n)
     {
         for(size_t i=0;i<n;i++)
         {
             a[i] = value;
         }
+
+        return a;
     }
 }
 
