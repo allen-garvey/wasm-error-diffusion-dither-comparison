@@ -33,6 +33,7 @@ Thumbs.db
 .vscode/*
 *.swp
 *.csv
+wasm/zig/zig-cache/*
 
 # Env variables
 .env
