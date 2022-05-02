@@ -11,14 +11,14 @@ export const dither = (pixels, imageWidth, imageHeight) => {
     const ditheredPixels = new Uint8ClampedArray(pixels.length).fill(255);
     // add 2 to beginning and end so we don't need to do bounds checks
     const errorDiffusionWidth = imageWidth + 4;
-    let row1 = new Int16Array(errorDiffusionWidth);
-    let row2 = new Int16Array(errorDiffusionWidth);
-    let row3 = new Int16Array(errorDiffusionWidth);
+    let errorRow1 = new Int16Array(errorDiffusionWidth);
+    let errorRow2 = new Int16Array(errorDiffusionWidth);
+    let errorRow3 = new Int16Array(errorDiffusionWidth);
 
     const startTime = performance.now();
     for(let y=0,pixelIndex=0; y<imageHeight; y++){
         for(let x=0,errorIndex=2;x<imageWidth;x++,pixelIndex+=4,errorIndex++){
-            const storedError = row1[errorIndex];
+            const storedError = errorRow1[errorIndex];
             const lightness = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
             const adjustedLightness = storedError + lightness;
             const outputValue = adjustedLightness > 127 ? 255 : 0;
@@ -32,26 +32,26 @@ export const dither = (pixels, imageWidth, imageHeight) => {
             const errorFraction4 = errorFraction * 4;
             const errorFraction8 = errorFraction * 8;
 
-            row1[errorIndex+1] = errorFraction8;
-            row1[errorIndex+2] = errorFraction4;
+            errorRow1[errorIndex+1] = errorFraction8;
+            errorRow1[errorIndex+2] = errorFraction4;
 
-            row2[errorIndex-2] = errorFraction2;
-            row2[errorIndex-1] = errorFraction4;
-            row2[errorIndex] = errorFraction8;
-            row2[errorIndex+1] = errorFraction4;
-            row2[errorIndex+2] = errorFraction2;
+            errorRow2[errorIndex-2] = errorFraction2;
+            errorRow2[errorIndex-1] = errorFraction4;
+            errorRow2[errorIndex] = errorFraction8;
+            errorRow2[errorIndex+1] = errorFraction4;
+            errorRow2[errorIndex+2] = errorFraction2;
 
-            row3[errorIndex-2] = errorFraction;
-            row3[errorIndex-1] = errorFraction2;
-            row3[errorIndex] = errorFraction4;
-            row3[errorIndex+1] = errorFraction2;
-            row3[errorIndex+2] = errorFraction;
+            errorRow3[errorIndex-2] = errorFraction;
+            errorRow3[errorIndex-1] = errorFraction2;
+            errorRow3[errorIndex] = errorFraction4;
+            errorRow3[errorIndex+1] = errorFraction2;
+            errorRow3[errorIndex+2] = errorFraction;
         }
-        row1.fill(0);
-        const temp = row1;
-        row1 = row2;
-        row2 = row3;
-        row3 = temp;
+        errorRow1.fill(0);
+        const temp = errorRow1;
+        errorRow1 = errorRow2;
+        errorRow2 = errorRow3;
+        errorRow3 = temp;
     }
     const timeElapsed = (performance.now() - startTime) / 1000;
     return {
