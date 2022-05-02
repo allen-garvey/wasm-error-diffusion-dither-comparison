@@ -22,14 +22,6 @@ private ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
     return (maxValue + minValue) / 2;
 }
 
-private void zerroArray(short[] array)
-{
-    foreach (i, value; array) 
-    {
-        array[i] = 0;
-    }
-}
-
 private short round(float f)
 {
     short lower = cast(short) f;
@@ -91,7 +83,8 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
             errorIndex++;
         }
 
-        zerroArray(errorRow1);
+        errorRow1[0 .. errorRow1.length] = 0;
+        
         short[] temp = errorRow1;
         errorRow1 = errorRow2;
         errorRow2 = errorRow3;
