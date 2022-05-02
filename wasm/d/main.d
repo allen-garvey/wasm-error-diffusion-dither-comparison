@@ -1,28 +1,28 @@
 //main entry point
 extern(C): // disable D mangling
 
-ubyte max(ubyte v1, ubyte v2, ubyte v3)
+private ubyte max(ubyte v1, ubyte v2, ubyte v3)
 {
     if (v1 > v2)
         return v1 > v3 ? v1 : v3;
     return v2 > v3 ? v2 : v3;
 }
 
-ubyte min(ubyte v1, ubyte v2, ubyte v3)
+private ubyte min(ubyte v1, ubyte v2, ubyte v3)
 {
     if (v1 < v2)
         return v1 < v3 ? v1 : v3;
     return v2 < v3 ? v2 : v3;
 }
 
-ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
+private ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
 {
     const maxValue = max(r, g, b);
     const minValue = min(r, g, b);
     return (maxValue + minValue) / 2;
 }
 
-void zerroArray(short[] array)
+private void zerroArray(short[] array)
 {
     foreach (i, value; array) 
     {
@@ -30,7 +30,7 @@ void zerroArray(short[] array)
     }
 }
 
-short round(float f)
+private short round(float f)
 {
     short lower = cast(short) f;
     const error = f - lower;
@@ -105,7 +105,7 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
 version(WebAssembly){
     void __assert(const(char)* msg, const(char)* file, uint line) {}
 
-    void memset(short[] a, short value, size_t n)
+    void memset(short* a, short value, size_t n)
     {
         for(size_t i=0;i<n;i++)
         {
