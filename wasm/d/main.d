@@ -24,10 +24,7 @@ ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
 
 short round(float f)
 {
-    short lower = cast(short) f;
-    const error = f - lower;
-
-    return error >= 0.5 ? cast(short) (lower + 1) : lower;
+    return f < 0 ? cast(short) (f - 0.5) : cast(short)(f + 0.5);
 }
 
 void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsBuffer)
