@@ -6,7 +6,7 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
     return (maxValue + minValue) / 2;
 }
  
- pub fn main(pixelsBuffer: [*]u8, imageWidth: u32, imageHeight: u32, errorsBuffer: [*]i16) void {
+ export fn dither(pixelsBuffer: [*]u8, imageWidth: u32, imageHeight: u32, errorsBuffer: [*]i16) void {
     //* 4 since RGBA format
     const pixelsLength: usize = imageWidth * imageHeight * 4;
     const pixels: []u8 = pixelsBuffer[0 .. pixelsLength];
