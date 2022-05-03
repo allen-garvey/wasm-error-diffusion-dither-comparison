@@ -24,7 +24,9 @@ const instantiateWasm = (memo, imageWidth, imageHeight) => {
     const PAGE_SIZE_IN_BYTES = 64 * 1024;
     const imageSizeInPages = Math.ceil(imageWidth * imageHeight * 4 / PAGE_SIZE_IN_BYTES);
     // enough space to store 3 rows of 2 byte shorts
-    const errorBufferSizeInPages = Math.ceil(imageWidth * 2 * 3 / PAGE_SIZE_IN_BYTES);
+    const NUM_ERROR_ROWS = 3;
+    const ERROR_ARRAY_ITEM_BYTE_SIZE = 2; //short
+    const errorBufferSizeInPages = Math.ceil(imageWidth * ERROR_ARRAY_ITEM_BYTE_SIZE * NUM_ERROR_ROWS / PAGE_SIZE_IN_BYTES);
     const memoryPagesRequired = imageSizeInPages + errorBufferSizeInPages;
     
     return Promise.all(Object.keys(memo).map((key) => {
