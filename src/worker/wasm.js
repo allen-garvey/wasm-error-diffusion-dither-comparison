@@ -5,6 +5,10 @@ const wasmModel = [
         key: messageHeaders.DITHER_D,
         source: 'd',
     },
+    {
+        key: messageHeaders.DITHER_ZIG,
+        source: 'zig',
+    },
 ];
 
 const initializeWasm = (memo) => Promise.all(wasmModel.map(({key, source}) =>

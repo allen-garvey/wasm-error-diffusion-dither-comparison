@@ -9,4 +9,8 @@ export default [
         title: 'D',
         value: messageHeaders.DITHER_D,
     },
+    {
+        title: 'Zig',
+        value: messageHeaders.DITHER_ZIG,
+    },
 ];
