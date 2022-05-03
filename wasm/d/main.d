@@ -24,7 +24,7 @@ ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
 
 short round(float f)
 {
-    return f < 0 ? cast(short) (f - 0.5) : cast(short)(f + 0.5);
+    return f < 0 ? cast(short) (f - 0.5) : cast(short) (f + 0.5);
 }
 
 void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsBuffer)
@@ -61,20 +61,20 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
             short errorFraction4 = cast(short) (errorFraction * 4);
             short errorFraction8 = cast(short) (errorFraction * 8);
 
-            errorRow1[errorIndex+1] = cast(short) (errorRow1[errorIndex+1] + errorFraction8);
-            errorRow1[errorIndex+2] = cast(short) (errorRow1[errorIndex+2] + errorFraction4);
+            errorRow1[errorIndex+1] += errorFraction8;
+            errorRow1[errorIndex+2] +=  errorFraction4;
 
-            errorRow2[errorIndex-2] = cast(short) (errorRow2[errorIndex-2] + errorFraction2);
-            errorRow2[errorIndex-1] = cast(short) (errorRow2[errorIndex-1] + errorFraction4);
-            errorRow2[errorIndex] = cast(short) (errorRow2[errorIndex] + errorFraction8);
-            errorRow2[errorIndex+1] = cast(short) (errorRow2[errorIndex+1] + errorFraction4);
-            errorRow2[errorIndex+2] = cast(short) (errorRow2[errorIndex+2] + errorFraction2);
+            errorRow2[errorIndex-2] += errorFraction2;
+            errorRow2[errorIndex-1] += errorFraction4;
+            errorRow2[errorIndex] += errorFraction8;
+            errorRow2[errorIndex+1] += errorFraction4;
+            errorRow2[errorIndex+2] += errorFraction2;
 
-            errorRow3[errorIndex-2] = cast(short) (errorRow3[errorIndex-2] + errorFraction);
-            errorRow3[errorIndex-1] = cast(short) (errorRow3[errorIndex-1] + errorFraction2);
-            errorRow3[errorIndex] = cast(short) (errorRow3[errorIndex] + errorFraction4);
-            errorRow3[errorIndex+1] = cast(short) (errorRow3[errorIndex+1] + errorFraction2);
-            errorRow3[errorIndex+2] = cast(short) (errorRow3[errorIndex+2] + errorFraction);
+            errorRow3[errorIndex-2] += errorFraction;
+            errorRow3[errorIndex-1] += errorFraction2;
+            errorRow3[errorIndex] += errorFraction4;
+            errorRow3[errorIndex+1] += errorFraction2;
+            errorRow3[errorIndex+2] += errorFraction;
 
             pixelIndex += 4;
             errorIndex++;
