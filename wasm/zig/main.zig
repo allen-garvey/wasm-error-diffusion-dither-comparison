@@ -44,20 +44,20 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
             const errorFraction4: i16 = errorFraction * 4;
             const errorFraction8: i16 = errorFraction * 8;
 
-            errorRow1[errorIndex+1] = errorRow1[errorIndex+1] + errorFraction8;
-            errorRow1[errorIndex+2] = errorRow1[errorIndex+2] + errorFraction4;
+            errorRow1[errorIndex+1] += errorFraction8;
+            errorRow1[errorIndex+2] += errorFraction4;
 
-            errorRow2[errorIndex-2] = errorRow2[errorIndex-2] + errorFraction2;
-            errorRow2[errorIndex-1] = errorRow2[errorIndex-1] + errorFraction4;
-            errorRow2[errorIndex] = errorRow2[errorIndex] + errorFraction8;
-            errorRow2[errorIndex+1] = errorRow2[errorIndex+1] + errorFraction4;
-            errorRow2[errorIndex+2] = errorRow2[errorIndex+2] + errorFraction2;
+            errorRow2[errorIndex-2] += errorFraction2;
+            errorRow2[errorIndex-1] += errorFraction4;
+            errorRow2[errorIndex] += errorFraction8;
+            errorRow2[errorIndex+1] += errorFraction4;
+            errorRow2[errorIndex+2] += errorFraction2;
 
-            errorRow3[errorIndex-2] = errorRow3[errorIndex-2] + errorFraction;
-            errorRow3[errorIndex-1] = errorRow3[errorIndex-1] + errorFraction2;
-            errorRow3[errorIndex] = errorRow3[errorIndex] + errorFraction4;
-            errorRow3[errorIndex+1] = errorRow3[errorIndex+1] + errorFraction2;
-            errorRow3[errorIndex+2] = errorRow3[errorIndex+2] + errorFraction;
+            errorRow3[errorIndex-2] += errorFraction;
+            errorRow3[errorIndex-1] += errorFraction2;
+            errorRow3[errorIndex] += errorFraction4;
+            errorRow3[errorIndex+1] += errorFraction2;
+            errorRow3[errorIndex+2] += errorFraction;
 
             pixelIndex += 4;
             errorIndex += 1;
