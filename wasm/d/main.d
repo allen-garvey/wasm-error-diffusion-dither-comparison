@@ -42,7 +42,6 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
     size_t pixelIndex = 0;
     foreach (y; 0 .. imageHeight)
     {
-
         int errorIndex = 2;
         
         foreach (x; 0 .. imageWidth)
