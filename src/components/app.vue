@@ -6,28 +6,29 @@
                 accept="image/png,image/gif,image/jpeg,image/webp"
                 @change.prevent="fileLoaded"
             />
-            <label>
-                Language
-                <select
-                    v-model="ditherLanguage"
+            <template v-if="isImageLoaded">
+                <label>
+                    Language
+                    <select
+                        v-model="ditherLanguage"
+                        :disabled="isWorkerBusy"
+                    >
+                        <option 
+                            v-for="option in ditherDropdownModel"
+                            :key="option.value"
+                            :value="option.value"
+                        >
+                            {{ option.title }}
+                        </option>
+                    </select>
+                </label>
+                <button
+                    @click="dither"
                     :disabled="isWorkerBusy"
                 >
-                    <option 
-                        v-for="option in ditherDropdownModel"
-                        :key="option.value"
-                        :value="option.value"
-                    >
-                        {{ option.title }}
-                    </option>
-                </select>
-            </label>
-            <button
-                v-if="isImageLoaded"
-                @click="dither"
-                :disabled="isWorkerBusy"
-            >
-                Dither
-            </button>
+                    Dither
+                </button>
+            </template>
             <img
                 v-show="false"
                 ref="image"
@@ -91,6 +92,9 @@ export default {
         },
     },
     watch: {
+        ditherLanguage(){
+            this.dither();
+        },
     },
     methods: {
         fileLoaded(e){
