@@ -61,7 +61,7 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
             short errorFraction8 = cast(short) (errorFraction * 8);
 
             errorRow1[errorIndex+1] += errorFraction8;
-            errorRow1[errorIndex+2] +=  errorFraction4;
+            errorRow1[errorIndex+2] += errorFraction4;
 
             errorRow2[errorIndex-2] += errorFraction2;
             errorRow2[errorIndex-1] += errorFraction4;
