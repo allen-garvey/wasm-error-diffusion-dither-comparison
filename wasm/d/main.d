@@ -55,10 +55,11 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
             pixels[pixelIndex .. pixelIndex+3] = outputValue;
 
             // save error
-            short errorFraction = round((adjustedLightness - outputValue) / 42.0);
-            short errorFraction2 = cast(short) (errorFraction * 2);
-            short errorFraction4 = cast(short) (errorFraction * 4);
-            short errorFraction8 = cast(short) (errorFraction * 8);
+            float errorFractionF = (adjustedLightness - outputValue) / 42.0;
+            short errorFraction = round(errorFractionF);
+            short errorFraction2 = round(errorFractionF * 2);
+            short errorFraction4 = round(errorFractionF * 4);
+            short errorFraction8 = round(errorFractionF * 8);
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;

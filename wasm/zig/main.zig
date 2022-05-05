@@ -39,10 +39,11 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
             pixels[pixelIndex+2] = outputValue;
 
             // save error
-            const errorFraction: i16 = @floatToInt(i16, math.round(@intToFloat(f32, adjustedLightness - outputValue) / 42.0));
-            const errorFraction2: i16 = errorFraction * 2;
-            const errorFraction4: i16 = errorFraction * 4;
-            const errorFraction8: i16 = errorFraction * 8;
+            const errorFractionF: f32 = @intToFloat(f32, adjustedLightness - outputValue) / 42.0;
+            const errorFraction: i16 = @floatToInt(i16, math.round(errorFractionF));
+            const errorFraction2: i16 = @floatToInt(i16, math.round(errorFractionF * 2));
+            const errorFraction4: i16 = @floatToInt(i16, math.round(errorFractionF * 4));
+            const errorFraction8: i16 = @floatToInt(i16, math.round(errorFractionF * 8));
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;

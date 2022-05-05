@@ -27,10 +27,11 @@ export const dither = (pixels, imageWidth, imageHeight) => {
             ditheredPixels[pixelIndex+1] = outputValue;
             ditheredPixels[pixelIndex+2] = outputValue;
 
-            const errorFraction = Math.round((adjustedLightness - outputValue) / 42);
-            const errorFraction2 = errorFraction * 2;
-            const errorFraction4 = errorFraction * 4;
-            const errorFraction8 = errorFraction * 8;
+            let errorFraction = (adjustedLightness - outputValue) / 42;
+            const errorFraction2 =  Math.round(errorFraction * 2);
+            const errorFraction4 =  Math.round(errorFraction * 4);
+            const errorFraction8 =  Math.round(errorFraction * 8);
+            errorFraction = Math.round(errorFraction);
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;
