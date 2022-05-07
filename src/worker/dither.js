@@ -11,9 +11,10 @@ export const dither = (pixels, imageWidth, imageHeight) => {
     const ditheredPixels = pixels.slice().fill(255);
     // add 2 to beginning and end so we don't need to do bounds checks
     const errorDiffusionWidth = imageWidth + 4;
-    let errorRow1 = new Int16Array(errorDiffusionWidth);
-    let errorRow2 = new Int16Array(errorDiffusionWidth);
-    let errorRow3 = new Int16Array(errorDiffusionWidth);
+    const errorBuffer = new ArrayBuffer(errorDiffusionWidth * 3 * 4);
+    let errorRow1 = new Float32Array(errorBuffer, 0, errorDiffusionWidth);
+    let errorRow2 = new Float32Array(errorBuffer, errorDiffusionWidth * 4, errorDiffusionWidth);
+    let errorRow3 = new Float32Array(errorBuffer, errorDiffusionWidth * 8, errorDiffusionWidth);
 
     const startTime = performance.now();
     for(let y=0,pixelIndex=0; y<imageHeight; y++){
@@ -28,10 +29,9 @@ export const dither = (pixels, imageWidth, imageHeight) => {
             ditheredPixels[pixelIndex+2] = outputValue;
 
             let errorFraction = (adjustedLightness - outputValue) / 42;
-            const errorFraction2 =  Math.round(errorFraction * 2);
-            const errorFraction4 =  Math.round(errorFraction * 4);
-            const errorFraction8 =  Math.round(errorFraction * 8);
-            errorFraction = Math.round(errorFraction);
+            const errorFraction2 =  errorFraction * 2;
+            const errorFraction4 =  errorFraction * 4;
+            const errorFraction8 =  errorFraction * 8;
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;
