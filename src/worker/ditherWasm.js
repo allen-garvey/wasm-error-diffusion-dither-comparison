@@ -1,7 +1,7 @@
 export const ditherWasm = (wasmExports, pixels, imageWidth, imageHeight) => {
     const ditheredPixels = new Uint8ClampedArray(wasmExports.memory.buffer, 0, pixels.length);
     ditheredPixels.set(pixels);
-    const errorArray = new Int16Array(wasmExports.memory.buffer, pixels.length, (imageWidth + 4) * 3);
+    const errorArray = new Float32Array(wasmExports.memory.buffer, pixels.length, (imageWidth + 4) * 3);
     errorArray.fill(0);
 
     const startTime = performance.now();

@@ -22,12 +22,7 @@ ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
     return (maxValue + minValue) / 2;
 }
 
-short round(float f)
-{
-    return f < 0 ? cast(short) (f - 0.5) : cast(short) (f + 0.5);
-}
-
-void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsBuffer)
+void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, float* errorsBuffer)
 {
     //* 4 since RGBA format
     const pixelsLength = (cast(size_t) imageWidth) * imageHeight * 4;
@@ -35,9 +30,9 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
 
     // buffer on either side of error array to avoid bounds checking
     const errorArrayLength = imageWidth + 4;
-    short[] errorRow1 = errorsBuffer[0 .. errorArrayLength];
-    short[] errorRow2 = errorsBuffer[errorArrayLength .. 2 * errorArrayLength];
-    short[] errorRow3 = errorsBuffer[2 * errorArrayLength .. 3 * errorArrayLength];
+    float[] errorRow1 = errorsBuffer[0 .. errorArrayLength];
+    float[] errorRow2 = errorsBuffer[errorArrayLength .. 2 * errorArrayLength];
+    float[] errorRow3 = errorsBuffer[2 * errorArrayLength .. 3 * errorArrayLength];
 
     size_t pixelIndex = 0;
     foreach (y; 0 .. imageHeight)
@@ -46,20 +41,19 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
         
         foreach (x; 0 .. imageWidth)
         {
-            short storedError = errorRow1[errorIndex];
+            float storedError = errorRow1[errorIndex];
             const lightness = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
-            short adjustedLightness = cast(short) (storedError + lightness);
+            float adjustedLightness = storedError + lightness;
             ubyte outputValue = adjustedLightness > 127 ? 255 : 0;
 
             //set color in pixels
             pixels[pixelIndex .. pixelIndex+3] = outputValue;
 
             // save error
-            float errorFractionF = (adjustedLightness - outputValue) / 42.0;
-            short errorFraction = round(errorFractionF);
-            short errorFraction2 = round(errorFractionF * 2);
-            short errorFraction4 = round(errorFractionF * 4);
-            short errorFraction8 = round(errorFractionF * 8);
+            float errorFraction = (adjustedLightness - outputValue) / 42.0;
+            float errorFraction2 = errorFraction * 2;
+            float errorFraction4 = errorFraction * 4;
+            float errorFraction8 = errorFraction * 8;
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;
@@ -80,9 +74,9 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
             errorIndex++;
         }
 
-        errorRow1[0 .. errorRow1.length] = 0;
+        errorRow1[0 .. errorRow1.length] = 0.0;
         
-        short[] temp = errorRow1;
+        float[] temp = errorRow1;
         errorRow1 = errorRow2;
         errorRow2 = errorRow3;
         errorRow3 = temp;
@@ -95,11 +89,15 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, short* errorsB
 version(WebAssembly){
     void __assert(const(char)* msg, const(char)* file, uint line) {}
 
-    short* memset(short* a, short value, size_t n)
+    // value needs to be int, since for some reason bug in compiler
+    // causes 0 to be sent in as i32 value instead of f32
+    float* memset(float* a, int value, size_t n)
     {
+        float[] slice = a[0 .. n];
+        
         for(size_t i=0;i<n;i++)
         {
-            a[i] = value;
+            slice[i] = value;
         }
 
         return a;
