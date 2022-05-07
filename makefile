@@ -20,3 +20,4 @@ $(ZIG_WASM_OUTPUT): $(ZIG_SRC)
 
 clean:
 	rm $(WASM_OUTPUT_DIR)/*.wasm
+	rm -rf wasm/zig/zig-cache
