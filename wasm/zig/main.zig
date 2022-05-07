@@ -6,16 +6,16 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
     return (maxValue + minValue) / 2;
 }
  
- export fn dither(pixelsBuffer: [*]u8, imageWidth: u32, imageHeight: u32, errorsBuffer: [*]i16) void {
+ export fn dither(pixelsBuffer: [*]u8, imageWidth: u32, imageHeight: u32, errorsBuffer: [*]f32) void {
     //* 4 since RGBA format
     const pixelsLength: usize = imageWidth * imageHeight * 4;
     const pixels: []u8 = pixelsBuffer[0 .. pixelsLength];
 
     // buffer on either side of error array to avoid bounds checking
     const errorArrayLength: usize = imageWidth + 4;
-    var errorRow1: []i16 = errorsBuffer[0 .. errorArrayLength];
-    var errorRow2: []i16 = errorsBuffer[errorArrayLength .. 2 * errorArrayLength];
-    var errorRow3: []i16 = errorsBuffer[2 * errorArrayLength .. 3 * errorArrayLength];
+    var errorRow1: []f32 = errorsBuffer[0 .. errorArrayLength];
+    var errorRow2: []f32 = errorsBuffer[errorArrayLength .. 2 * errorArrayLength];
+    var errorRow3: []f32 = errorsBuffer[2 * errorArrayLength .. 3 * errorArrayLength];
 
     var pixelIndex: usize = 0;
 
@@ -25,9 +25,9 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
         var x: i32 = 0;
         
         while (x < imageWidth) : (x += 1) {
-            const storedError: i16 = errorRow1[errorIndex];
+            const storedError: f32 = errorRow1[errorIndex];
             const lightness: u8 = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
-            const adjustedLightness: i16 = storedError + lightness;
+            const adjustedLightness: f32 = storedError + @intToFloat(f32, lightness);
             const outputValue: u8 = if (adjustedLightness > 127) 
                 255
             else
@@ -39,11 +39,10 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
             pixels[pixelIndex+2] = outputValue;
 
             // save error
-            const errorFractionF: f32 = @intToFloat(f32, adjustedLightness - outputValue) / 42.0;
-            const errorFraction: i16 = @floatToInt(i16, math.round(errorFractionF));
-            const errorFraction2: i16 = @floatToInt(i16, math.round(errorFractionF * 2));
-            const errorFraction4: i16 = @floatToInt(i16, math.round(errorFractionF * 4));
-            const errorFraction8: i16 = @floatToInt(i16, math.round(errorFractionF * 8));
+            const errorFraction:  f32 = (adjustedLightness - @intToFloat(f32, outputValue)) / 42.0;
+            const errorFraction2: f32 = errorFraction * 2;
+            const errorFraction4: f32 = errorFraction * 4;
+            const errorFraction8: f32 = errorFraction * 8;
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;
@@ -68,7 +67,7 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
             errorRow1[i] = 0;
         }
         
-        const temp: []i16 = errorRow1;
+        const temp: []f32 = errorRow1;
         errorRow1 = errorRow2;
         errorRow2 = errorRow3;
         errorRow3 = temp;
