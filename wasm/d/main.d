@@ -91,12 +91,10 @@ version(WebAssembly){
     // value needs to be int, since for some reason bug in compiler
     // causes 0 to be sent in as i32 value instead of f32
     float* memset(float* a, int value, size_t n)
-    {
-        float[] slice = a[0 .. n];
-        
+    {   
         for(size_t i=0;i<n;i++)
         {
-            slice[i] = value;
+            a[i] = value;
         }
 
         return a;
