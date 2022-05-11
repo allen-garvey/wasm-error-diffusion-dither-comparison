@@ -1,7 +1,7 @@
 const calculateLightness = (r, g, b) => {
     const max = Math.max(r, g, b);
     const min = Math.min(r, g, b);
-    return Math.floor((max + min) / 2);
+    return (max + min) / 2;
 };
 
 
