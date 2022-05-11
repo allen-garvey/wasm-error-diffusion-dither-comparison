@@ -1,4 +1,3 @@
-//main entry point
 extern(C): // disable D mangling
 
 ubyte max(ubyte v1, ubyte v2, ubyte v3)
@@ -15,11 +14,11 @@ ubyte min(ubyte v1, ubyte v2, ubyte v3)
     return v2 < v3 ? v2 : v3;
 }
 
-ubyte calculateLightness(ubyte r, ubyte g, ubyte b)
+float calculateLightness(ubyte r, ubyte g, ubyte b)
 {
     const maxValue = max(r, g, b);
     const minValue = min(r, g, b);
-    return (maxValue + minValue) / 2;
+    return (maxValue + minValue) / 2.0;
 }
 
 void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, float* errorsBuffer)
@@ -41,19 +40,19 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, float* errorsB
         
         foreach (x; 0 .. imageWidth)
         {
-            float storedError = errorRow1[errorIndex];
+            const storedError = errorRow1[errorIndex];
             const lightness = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
-            float adjustedLightness = storedError + lightness;
+            const adjustedLightness = storedError + lightness;
             ubyte outputValue = adjustedLightness > 127 ? 255 : 0;
 
             //set color in pixels
             pixels[pixelIndex .. pixelIndex+3] = outputValue;
 
             // save error
-            float errorFraction = (adjustedLightness - outputValue) / 42.0;
-            float errorFraction2 = errorFraction * 2;
-            float errorFraction4 = errorFraction * 4;
-            float errorFraction8 = errorFraction * 8;
+            const errorFraction = (adjustedLightness - outputValue) / 42.0;
+            const errorFraction2 = errorFraction * 2;
+            const errorFraction4 = errorFraction * 4;
+            const errorFraction8 = errorFraction * 8;
 
             errorRow1[errorIndex+1] += errorFraction8;
             errorRow1[errorIndex+2] += errorFraction4;
