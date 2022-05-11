@@ -1,9 +1,9 @@
 const math = @import("std").math;
 
-fn calculateLightness(r: u8, g: u8, b: u8) u8{
+fn calculateLightness(r: u8, g: u8, b: u8) f32{
     const maxValue: u8 = math.max3(r, g, b);
     const minValue: u8 = math.min3(r, g, b);
-    return (maxValue + minValue) / 2;
+    return (@intToFloat(f32, maxValue) + @intToFloat(f32, minValue)) / 2;
 }
  
  export fn dither(pixelsBuffer: [*]u8, imageWidth: u32, imageHeight: u32, errorsBuffer: [*]f32) void {
@@ -26,8 +26,8 @@ fn calculateLightness(r: u8, g: u8, b: u8) u8{
         
         while (x < imageWidth) : (x += 1) {
             const storedError: f32 = errorRow1[errorIndex];
-            const lightness: u8 = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
-            const adjustedLightness: f32 = storedError + @intToFloat(f32, lightness);
+            const lightness: f32 = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
+            const adjustedLightness: f32 = lightness + storedError;
             const outputValue: u8 = if (adjustedLightness > 127) 
                 255
             else
