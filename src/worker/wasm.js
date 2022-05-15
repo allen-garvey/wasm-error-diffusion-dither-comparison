@@ -2,6 +2,10 @@ import messageHeaders from '../message-headers';
 
 const wasmModel = [
     {
+        key: messageHeaders.DITHER_CPP,
+        source: 'cpp',
+    },
+    {
         key: messageHeaders.DITHER_D,
         source: 'd',
     },

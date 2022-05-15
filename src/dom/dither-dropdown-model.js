@@ -6,6 +6,10 @@ export default [
         value: messageHeaders.DITHER_JS,
     },
     {
+        title: 'C++',
+        value: messageHeaders.DITHER_CPP,
+    },
+    {
         title: 'D',
         value: messageHeaders.DITHER_D,
     },
