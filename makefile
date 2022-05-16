@@ -16,7 +16,7 @@ ZIG_WASM_OUTPUT=$(WASM_OUTPUT_DIR)/zig.wasm
 all: $(D_WASM_OUTPUT) $(ZIG_WASM_OUTPUT) $(CPP_WASM_OUTPUT)
 
 $(CPP_WASM_OUTPUT): $(CPP_SRC)
-	clang --target=wasm32 --no-standard-libraries -Wl,--export-all -Wl,--no-entry -o $(CPP_WASM_OUTPUT) $(CPP_SRC)
+	emcc -O2 $(CPP_SRC) -o $(CPP_WASM_OUTPUT) --no-entry -sEXPORTED_FUNCTIONS=_dither -sALLOW_MEMORY_GROWTH=1
 
 $(D_WASM_OUTPUT): $(D_SRC)
 	ldc2 -mtriple=wasm32-unknown-unknown-wasm -betterC -O $(D_SRC) -of=$(D_WASM_OUTPUT) -od=$(D_SRC_DIR)
