@@ -84,8 +84,9 @@ version(WebAssembly){
 
     // value needs to be int, since for some reason bug in compiler
     // causes 0 to be sent in as i32 value instead of f32
-    float* memset(float* a, int value, size_t n){   
-        for(size_t i=0;i<n;i++){
+    float* memset(float* a, int value, size_t n){
+        size_t length = n / 4;   
+        for(size_t i=0;i<length;i++){
             a[i] = value;
         }
 
