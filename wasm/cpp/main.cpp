@@ -18,9 +18,7 @@ extern "C" {
 
         std::size_t pixelIndex = 0;
         for (int y=0;y<imageHeight;y++){
-            int errorIndex = 2;
-            
-            for(int x=0;x<imageWidth;x++,pixelIndex+=4){
+            for(int x=0,errorIndex=2;x<imageWidth;x++,pixelIndex+=4,errorIndex++){
                 float storedError = errorRow1[errorIndex];
                 float lightness = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
                 float adjustedLightness = storedError + lightness;
@@ -51,8 +49,6 @@ extern "C" {
                 errorRow3[errorIndex] += errorFraction4;
                 errorRow3[errorIndex+1] += errorFraction2;
                 errorRow3[errorIndex+2] += errorFraction;
-
-                errorIndex++;
             }
 
             for(int i=0;i<errorArrayLength;i++){
