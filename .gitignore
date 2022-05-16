@@ -35,6 +35,7 @@ Thumbs.db
 *.csv
 wasm/zig/zig-cache/*
 public/assets/*.js
+public/assets/*.css
 
 # Env variables
 .env
