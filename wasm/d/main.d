@@ -1,28 +1,24 @@
 extern(C): // disable D mangling
 
-ubyte max(ubyte v1, ubyte v2, ubyte v3)
-{
+ubyte max(ubyte v1, ubyte v2, ubyte v3){
     if (v1 > v2)
         return v1 > v3 ? v1 : v3;
     return v2 > v3 ? v2 : v3;
 }
 
-ubyte min(ubyte v1, ubyte v2, ubyte v3)
-{
+ubyte min(ubyte v1, ubyte v2, ubyte v3){
     if (v1 < v2)
         return v1 < v3 ? v1 : v3;
     return v2 < v3 ? v2 : v3;
 }
 
-float calculateLightness(ubyte r, ubyte g, ubyte b)
-{
+float calculateLightness(ubyte r, ubyte g, ubyte b){
     const maxValue = max(r, g, b);
     const minValue = min(r, g, b);
     return (maxValue + minValue) / 2.0;
 }
 
-void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, float* errorsBuffer)
-{
+void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, float* errorsBuffer){
     //* 4 since RGBA format
     const pixelsLength = (cast(size_t) imageWidth) * imageHeight * 4;
     ubyte[] pixels = pixelsBuffer[0 .. pixelsLength];
@@ -34,12 +30,10 @@ void dither(ubyte* pixelsBuffer, int imageWidth, int imageHeight, float* errorsB
     float[] errorRow3 = errorsBuffer[2 * errorArrayLength .. 3 * errorArrayLength];
 
     size_t pixelIndex = 0;
-    foreach (y; 0 .. imageHeight)
-    {
+    foreach (y; 0 .. imageHeight){
         int errorIndex = 2;
         
-        foreach (x; 0 .. imageWidth)
-        {
+        foreach (x; 0 .. imageWidth){
             const storedError = errorRow1[errorIndex];
             const lightness = calculateLightness(pixels[pixelIndex], pixels[pixelIndex+1], pixels[pixelIndex+2]);
             const adjustedLightness = storedError + lightness;
@@ -90,8 +84,7 @@ version(WebAssembly){
 
     // value needs to be int, since for some reason bug in compiler
     // causes 0 to be sent in as i32 value instead of f32
-    float* memset(float* a, int value, size_t n)
-    {   
+    float* memset(float* a, int value, size_t n){   
         for(size_t i=0;i<n;i++)
         {
             a[i] = value;
