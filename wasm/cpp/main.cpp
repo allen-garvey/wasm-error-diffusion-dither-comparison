@@ -1,24 +1,11 @@
 #include <cstddef>
 #include <cstdint>
-
-uint8_t max(uint8_t v1, uint8_t v2, uint8_t v3)
-{
-    if (v1 > v2)
-        return v1 > v3 ? v1 : v3;
-    return v2 > v3 ? v2 : v3;
-}
-
-uint8_t min(uint8_t v1, uint8_t v2, uint8_t v3)
-{
-    if (v1 < v2)
-        return v1 < v3 ? v1 : v3;
-    return v2 < v3 ? v2 : v3;
-}
+#include <algorithm>
 
 float calculateLightness(uint8_t r, uint8_t g, uint8_t b)
 {
-    uint8_t maxValue = max(r, g, b);
-    uint8_t minValue = min(r, g, b);
+    uint8_t maxValue = std::max({r, g, b});
+    uint8_t minValue = std::min({r, g, b});
     return (maxValue + minValue) / 2.0;
 }
 
