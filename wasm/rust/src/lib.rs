@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 fn calculate_lightness(r: u8, g: u8, b: u8) -> f32 {
     let max_value: u8 = cmp::max(cmp::max(r, g), b);
     let min_value: u8 = cmp::min(cmp::min(r, g), b);
-    return ((max_value + min_value) as f32) / 2.0;
+    return (max_value as f32 + min_value as f32) / 2.0;
 }
 
 #[wasm_bindgen]
