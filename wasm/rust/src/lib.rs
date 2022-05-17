@@ -60,7 +60,7 @@ pub fn dither(pixels_buffer: *mut u8, image_width: u32, image_height: u32, error
             error_index += 1;
         }
 
-        for i in 0..image_width {
+        for i in 0..error_array_length {
             error_row1[i as usize] = 0.0;
         }
         
