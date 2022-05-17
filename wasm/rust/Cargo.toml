@@ -3,7 +3,6 @@ name = "dither"
 version = "0.1.0"
 edition = "2021"
 description = "Error propagation dither"
-license = "MIT"
 license-file = "../../license.txt"
 repository = "https://github.com/allen-garvey/wasm-error-propagation-dither-comparison"
 
