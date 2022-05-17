@@ -9,21 +9,25 @@ fn calculate_lightness(r: u8, g: u8, b: u8) -> f32 {
 }
 
 #[wasm_bindgen]
-pub fn dither(pixels_buffer: *mut u8, image_width: u32, image_height: u32, _errors_buffer: *mut f32) {
+pub fn dither(pixels_buffer: *mut u8, image_width: u32, image_height: u32, errors_buffer: *mut f32) {
     let pixels_length: usize = (image_width * image_height * 4) as usize;
     let pixels: &mut [u8] = unsafe { slice::from_raw_parts_mut(pixels_buffer, pixels_length) };
+
+    // buffer on either side of error array to avoid bounds checking
+    let error_array_length: usize = (image_width + 4) as usize;
+    let mut error_row1:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer, error_array_length) };
+    let mut error_row2:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer.offset(error_array_length as isize), error_array_length) };
+    let mut error_row3:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer.offset((2 * error_array_length) as isize), error_array_length) };
 
     let mut pixel_index: usize = 0;
 
     for _y in 0..image_height {
-        // var errorIndex: usize = 2;
-        // var x: i32 = 0;
+        let mut error_index: usize = 2;
         
         for _x in 0..image_width {
-            // const storedError: f32 = errorRow1[errorIndex];
+            let stored_error: f32 = error_row1[error_index];
             let lightness: f32 = calculate_lightness(pixels[pixel_index], pixels[pixel_index+1], pixels[pixel_index+2]);
-            // let adjusted_lightness: f32 = lightness + storedError;
-            let adjusted_lightness: f32 = lightness;
+            let adjusted_lightness: f32 = lightness + stored_error;
             let output_value: u8 = if adjusted_lightness > 127.0 { 255 } else { 0 };
             
             //set color in pixels
@@ -31,40 +35,38 @@ pub fn dither(pixels_buffer: *mut u8, image_width: u32, image_height: u32, _erro
             pixels[pixel_index+1] = output_value;
             pixels[pixel_index+2] = output_value;
 
-            /*
             // save error
-            const errorFraction:  f32 = (adjusted_lightness - @intToFloat(f32, output_value)) / 42.0;
-            const errorFraction2: f32 = errorFraction * 2;
-            const errorFraction4: f32 = errorFraction * 4;
-            const errorFraction8: f32 = errorFraction * 8;
+            let error_fraction:  f32 = (adjusted_lightness - (output_value as f32)) / 42.0;
+            let error_fraction2: f32 = error_fraction * 2.0;
+            let error_fraction4: f32 = error_fraction * 4.0;
+            let error_fraction8: f32 = error_fraction * 8.0;
 
-            errorRow1[errorIndex+1] += errorFraction8;
-            errorRow1[errorIndex+2] += errorFraction4;
+            error_row1[error_index+1] += error_fraction8;
+            error_row1[error_index+2] += error_fraction4;
 
-            errorRow2[errorIndex-2] += errorFraction2;
-            errorRow2[errorIndex-1] += errorFraction4;
-            errorRow2[errorIndex] += errorFraction8;
-            errorRow2[errorIndex+1] += errorFraction4;
-            errorRow2[errorIndex+2] += errorFraction2;
+            error_row2[error_index-2] += error_fraction2;
+            error_row2[error_index-1] += error_fraction4;
+            error_row2[error_index] += error_fraction8;
+            error_row2[error_index+1] += error_fraction4;
+            error_row2[error_index+2] += error_fraction2;
 
-            errorRow3[errorIndex-2] += errorFraction;
-            errorRow3[errorIndex-1] += errorFraction2;
-            errorRow3[errorIndex] += errorFraction4;
-            errorRow3[errorIndex+1] += errorFraction2;
-            errorRow3[errorIndex+2] += errorFraction;
-            */
+            error_row3[error_index-2] += error_fraction;
+            error_row3[error_index-1] += error_fraction2;
+            error_row3[error_index] += error_fraction4;
+            error_row3[error_index+1] += error_fraction2;
+            error_row3[error_index+2] += error_fraction;
 
             pixel_index += 4;
-            // errorIndex += 1;
+            error_index += 1;
         }
 
-        // for (errorRow1) |_, i| {
-        //     errorRow1[i] = 0;
-        // }
+        for i in 0..image_width {
+            error_row1[i as usize] = 0.0;
+        }
         
-        // const temp: []f32 = errorRow1;
-        // errorRow1 = errorRow2;
-        // errorRow2 = errorRow3;
-        // errorRow3 = temp;
+        let temp = error_row1;
+        error_row1 = error_row2;
+        error_row2 = error_row3;
+        error_row3 = temp;
     }
 }
