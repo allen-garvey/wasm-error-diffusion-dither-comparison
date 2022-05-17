@@ -10,6 +10,10 @@ const wasmModel = [
         source: 'd',
     },
     {
+        key: messageHeaders.DITHER_RUST,
+        source: 'rust',
+    },
+    {
         key: messageHeaders.DITHER_ZIG,
         source: 'zig',
     },

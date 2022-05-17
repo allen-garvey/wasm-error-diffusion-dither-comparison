@@ -14,6 +14,10 @@ export default [
         value: messageHeaders.DITHER_D,
     },
     {
+        title: 'Rust',
+        value: messageHeaders.DITHER_RUST,
+    },
+    {
         title: 'Zig',
         value: messageHeaders.DITHER_ZIG,
     },

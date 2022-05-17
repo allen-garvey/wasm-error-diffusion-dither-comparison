@@ -32,6 +32,7 @@ onmessage = event => {
             break;
         case messageHeaders.DITHER_CPP:
         case messageHeaders.DITHER_D:
+        case messageHeaders.DITHER_RUST:
         case messageHeaders.DITHER_ZIG:
             const ditherWasmResults = ditherWasm(wasmDithers[data.type].instance.exports, pixels, imageWidth, imageHeight);
             postMessage({
