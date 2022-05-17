@@ -1,28 +1,11 @@
-import messageHeaders from '../message-headers';
+import wasmDropdownModel from '../dom/dither-dropdown-model';
 
-const wasmModel = [
-    {
-        key: messageHeaders.DITHER_CPP,
-        source: 'cpp',
-    },
-    {
-        key: messageHeaders.DITHER_D,
-        source: 'd',
-    },
-    {
-        key: messageHeaders.DITHER_RUST,
-        source: 'rust',
-    },
-    {
-        key: messageHeaders.DITHER_ZIG,
-        source: 'zig',
-    },
-];
+const wasmModel = wasmDropdownModel.filter(model => model.source);
 
-const initializeWasm = (memo) => Promise.all(wasmModel.map(({key, source}) =>
+const initializeWasm = (memo) => Promise.all(wasmModel.map(({value, source}) =>
     WebAssembly.compileStreaming(fetch(`/assets/${source}.wasm`))
         .then(module => {
-            memo[key] = {
+            memo[value] = {
                 module,
             };
         })
