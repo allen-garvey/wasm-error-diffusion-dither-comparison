@@ -16,8 +16,8 @@ pub fn dither(pixels_buffer: *mut u8, image_width: u32, image_height: u32, error
     // buffer on either side of error array to avoid bounds checking
     let error_array_length: usize = (image_width + 4) as usize;
     let mut error_row1:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer, error_array_length) };
-    let mut error_row2:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer.offset(error_array_length as isize), error_array_length) };
-    let mut error_row3:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer.offset((2 * error_array_length) as isize), error_array_length) };
+    let mut error_row2:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer.add(error_array_length), error_array_length) };
+    let mut error_row3:  &mut [f32] = unsafe { slice::from_raw_parts_mut(errors_buffer.add(2 * error_array_length), error_array_length) };
 
     let mut pixel_index: usize = 0;
 
