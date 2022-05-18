@@ -12,7 +12,7 @@
                     class="form-control"
                     :class="[$style.formInput, $style.fileInput]"
                 />
-                <template v-if="isImageLoaded">
+                <div :class="$style.ditherControlsContainer" v-if="isImageLoaded">
                     <div :class="$style.languageSelectContainer">
                         <label class="form-label" for="language-select-dropdown">Language</label>
                         <select
@@ -40,7 +40,7 @@
                     >
                         Dither
                     </button>
-                </template>
+                </div>
             </div>
             <img
                 v-show="false"
@@ -88,6 +88,12 @@
 .fileInput {
     width: auto;
     margin-right: 4rem;
+}
+
+.ditherControlsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
 .languageSelectContainer {
