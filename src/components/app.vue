@@ -1,41 +1,54 @@
 <template>
     <div :class="$style.container">
         <div v-if="!isLoading">
-            <input 
-                type="file" 
-                accept="image/png,image/gif,image/jpeg,image/webp"
-                @change.prevent="fileLoaded"
-            />
-            <template v-if="isImageLoaded">
-                <label>
-                    Language
-                    <select
-                        v-model="ditherLanguage"
+            <h2>Open an image</h2>
+            <p>Your image file will remain on your computer and will not be uploaded or shared with anyone.</p>
+            <div :class="$style.controls">
+                <div :class="$style.fileInputContainer">
+                    <input 
+                        type="file" 
+                        accept="image/png,image/gif,image/jpeg,image/webp"
+                        @change.prevent="fileLoaded"
+                        :disabled="isWorkerBusy"
+                    />
+                </div>
+                <div v-if="isImageLoaded">
+                    <label>
+                        Language
+                        <select
+                            v-model="ditherLanguage"
+                            :disabled="isWorkerBusy"
+                        >
+                            <option 
+                                v-for="option in ditherDropdownModel"
+                                :key="option.value"
+                                :value="option.value"
+                            >
+                                {{ option.title }}
+                            </option>
+                        </select>
+                    </label>
+                    <button
+                        @click="dither"
                         :disabled="isWorkerBusy"
                     >
-                        <option 
-                            v-for="option in ditherDropdownModel"
-                            :key="option.value"
-                            :value="option.value"
-                        >
-                            {{ option.title }}
-                        </option>
-                    </select>
-                </label>
-                <button
-                    @click="dither"
-                    :disabled="isWorkerBusy"
-                >
-                    Dither
-                </button>
-            </template>
+                        Dither
+                    </button>
+                </div>
+            </div>
             <img
                 v-show="false"
                 ref="image"
                 @load.prevent="imageLoaded"
                 :src="currentImageObjectUrl || ''"
             />
-            <div v-if="timeElapsed">Megapixels per second: {{ imageMegapixels / timeElapsed }}</div>
+            <div 
+                v-if="timeElapsed"
+                :class="$style.performanceResults"
+            >
+                <h2>Performance <span :class="$style.performanceUnits">(Megapixels per second)</span></h2>
+                <p>{{ imageMegapixels / timeElapsed }}</p>
+            </div>
         </div>
         <div>
             <canvas 
@@ -48,7 +61,25 @@
 
 <style lang="scss" module>
 .container {
+    margin: 3.5rem 0 0;
+}
 
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fileInputContainer {
+    margin: 0 1rem 1rem 0;
+}
+
+.performanceResults {
+    margin: 2rem 0 1rem;
+}
+
+.performanceUnits {
+    font-size: 1rem;
+    font-weight: normal;
 }
 </style>
 
