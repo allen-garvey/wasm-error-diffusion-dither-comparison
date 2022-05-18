@@ -3,13 +3,19 @@
     <head>
         <meta charset="utf-8"/>
         <title>WASM Error Propagation Dither Comparison</title>
-        <meta name="description" content="A comparison or error propagation dither performance between JavaScript and WebAssembly generated via C, D, Rust and Zig."/>
+        <meta name="description" content="A comparison or error propagation dither performance between JavaScript and WebAssembly generated via C++, D, Rust and Zig."/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
     </head>
     <body>
         <div class="container">
-            <h1>WASM Error Propagation Dither Comparison</h1>
+            <h1>WebAssembly Error Propagation Dither Comparison</h1>
+            <p>
+                Compare the performance of JavaScript and WebAssembly generated via C++, D, Rust and Zig for dithering an image using the <a href="https://tannerhelland.com/2012/12/28/dithering-eleven-algorithms-source-code.html#stucki-dithering">Stucki error propagation dither algorithm.</a>
+            </p>
+            <p>
+                Want to learn more about dithering or experiment with more algorithms? Check out <a href="https://www.dithermark.com">Dithermark!</a>
+            </p>
             <div id="app"></div>
         </div>
         <script src="/assets/app.js"></script>
