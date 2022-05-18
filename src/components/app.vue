@@ -46,7 +46,7 @@
                 v-if="resultsStats"
                 :class="$style.performanceResults"
             >
-                <h2>Performance <span :class="$style.performanceUnits">(Megapixels per second)</span></h2>
+                <h2>{{ resultsLanguage }} Performance <span :class="$style.performanceUnits">(Megapixels per second)</span></h2>
                 <p 
                     v-for="(timeElapsed, i) in resultsStats.times"
                     :key="i"
@@ -130,6 +130,14 @@ export default {
         },
         imageMegapixels(){
             return this.imageHeight * this.imageWidth / 1000000;
+        },
+        resultsLanguage(){
+            for(let i=0;i<ditherDropdownModel.length;i++){
+                const model = ditherDropdownModel[i];
+                if(this.resultsStats.language === model.value){
+                    return model.title;
+                }
+            }
         },
     },
     watch: {
