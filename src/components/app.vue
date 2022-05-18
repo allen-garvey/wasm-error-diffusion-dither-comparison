@@ -101,7 +101,7 @@
 }
 
 .performanceResults {
-    margin: 2rem 0 1rem;
+    margin: 3.5rem 0 1rem;
 }
 
 .performanceUnits {
