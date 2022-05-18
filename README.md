@@ -1,6 +1,6 @@
 # WASM Error Propagation Dither Comparison
 
-A comparison or error propagation dither performance between JavaScript and WebAssembly generated from C++, D, Rust and Zig.
+A comparison of error propagation dither performance between JavaScript and WebAssembly generated from C++, D, Rust and Zig.
 
 ## Dependencies
 
