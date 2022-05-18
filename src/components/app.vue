@@ -93,7 +93,10 @@
 .ditherControlsContainer {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 1rem;
+
+    @media screen and (max-width: 700px) {
+        margin-top: 1rem;
+    }
 }
 
 .languageSelectContainer {
@@ -101,7 +104,7 @@
 }
 
 .performanceResults {
-    margin: 3.5rem 0 1rem;
+    margin: 3rem 0 1rem;
 }
 
 .performanceUnits {
