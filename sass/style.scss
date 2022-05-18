@@ -5,6 +5,10 @@ html, body {
     color: #006;
 }
 
+h1 {
+    margin: 0 0 1rem;
+}
+
 p {
     margin: 0 0 1em;
     line-height: 1.4em;
@@ -14,4 +18,23 @@ p {
     max-width: 1000px;
     padding: 1em;
     margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+// GitHub link
+.github-icon {
+    width: 18px;
+}
+
+.github-link {
+    display: flex;
+}
+
+.github-text {
+    margin-right: 0.1em;
 }
