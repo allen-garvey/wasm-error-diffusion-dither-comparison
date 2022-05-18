@@ -18,6 +18,10 @@ p {
     line-height: 1.4em;
 }
 
+input, button {
+    cursor: pointer;
+}
+
 .container {
     max-width: 1000px;
     padding: 1em;
