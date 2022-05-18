@@ -43,11 +43,17 @@
                 :src="currentImageObjectUrl || ''"
             />
             <div 
-                v-if="timeElapsed"
+                v-if="resultsStats"
                 :class="$style.performanceResults"
             >
                 <h2>Performance <span :class="$style.performanceUnits">(Megapixels per second)</span></h2>
-                <p>{{ imageMegapixels / timeElapsed }}</p>
+                <p 
+                    v-for="(timeElapsed, i) in resultsStats.times"
+                    :key="i"
+                    :class="$style.resultTime"
+                >
+                    {{ (imageMegapixels / timeElapsed).toFixed(2) }}
+                </p>
             </div>
         </div>
         <div>
@@ -81,6 +87,10 @@
     font-size: 1rem;
     font-weight: normal;
 }
+
+.resultTime {
+    margin: 0;
+}
 </style>
 
 <script>
@@ -108,7 +118,7 @@ export default {
             ditherWorker: null,
             ditherLanguage: ditherDropdownModel[0].value,
             isWorkerBusy: false,
-            timeElapsed: 0,
+            resultsStats: null,
         };
     },
     computed: {
@@ -169,8 +179,20 @@ export default {
         },
         onDitherResultsReceived(results){
             Canvas.draw(this.canvasContext, this.imageWidth, this.imageHeight, results.pixels);
-            this.timeElapsed = results.timeElapsed;
+            this.updateResultsStats(results);
             this.isWorkerBusy = false;
+        },
+        updateResultsStats(results){
+            if(!this.resultsStats || this.resultsStats.language !== results.language){
+                this.resultsStats = {
+                    language: results.language,
+                    times: [
+                        results.timeElapsed,
+                    ],
+                };
+                return;
+            }
+            this.resultsStats.times.push(results.timeElapsed);
         },
         onWorkerMessageReceived(event){
             switch(event.data.type){
