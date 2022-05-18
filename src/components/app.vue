@@ -4,20 +4,23 @@
             <h2>Open an image</h2>
             <p>Your image file will remain on your computer and will not be uploaded or shared with anyone.</p>
             <div :class="$style.controls">
-                <div :class="$style.fileInputContainer">
-                    <input 
-                        type="file" 
-                        accept="image/png,image/gif,image/jpeg,image/webp"
-                        @change.prevent="fileLoaded"
-                        :disabled="isWorkerBusy"
-                    />
-                </div>
-                <div v-if="isImageLoaded">
-                    <label>
-                        Language
+                <input 
+                    type="file" 
+                    accept="image/png,image/gif,image/jpeg,image/webp"
+                    @change.prevent="fileLoaded"
+                    :disabled="isWorkerBusy"
+                    class="form-control"
+                    :class="[$style.formInput, $style.fileInput]"
+                />
+                <template v-if="isImageLoaded">
+                    <div :class="$style.languageSelectContainer">
+                        <label class="form-label" for="language-select-dropdown">Language</label>
                         <select
                             v-model="ditherLanguage"
                             :disabled="isWorkerBusy"
+                            class="form-select"
+                            :class="$style.formInput"
+                            id="language-select-dropdown"
                         >
                             <option 
                                 v-for="option in ditherDropdownModel"
@@ -27,14 +30,17 @@
                                 {{ option.title }}
                             </option>
                         </select>
-                    </label>
+                    </div>
                     <button
                         @click="dither"
                         :disabled="isWorkerBusy"
+                        type="button"
+                        class="btn btn-success"
+                        :class="$style.formInput"
                     >
                         Dither
                     </button>
-                </div>
+                </template>
             </div>
             <img
                 v-show="false"
@@ -75,8 +81,17 @@
     flex-wrap: wrap;
 }
 
-.fileInputContainer {
-    margin: 0 1rem 1rem 0;
+.formInput {
+    align-self: flex-end;
+}
+
+.fileInput {
+    width: auto;
+    margin-right: 4rem;
+}
+
+.languageSelectContainer {
+    margin-right: 0.5rem;
 }
 
 .performanceResults {

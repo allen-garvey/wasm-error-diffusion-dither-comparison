@@ -30,6 +30,11 @@ module.exports = {
             index: 'index.html'
         },
     },
+    resolve: {
+        alias: {
+            bootstrap: path.resolve(__dirname, '/node_modules/bootstrap/scss'),
+        },
+    },
     module: {
         rules: [
             {

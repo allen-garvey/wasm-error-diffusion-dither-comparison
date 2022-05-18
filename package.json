@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/allen-garvey/wasm-error-propagation-dither-comparison#readme",
   "dependencies": {
+    "bootstrap": "^5.2.0-beta1",
     "vue": "^3.2.33"
   },
   "devDependencies": {
