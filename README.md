@@ -1,6 +1,6 @@
-# WASM Error Propagation Dither Comparison
+# WASM Error Diffusion Dither Comparison
 
-A comparison of error propagation dither performance between JavaScript and WebAssembly generated from C++, D, Rust and Zig.
+A comparison of error diffusion dither performance using the [Stucki error diffusion dither algorithm](https://tannerhelland.com/2012/12/28/dithering-eleven-algorithms-source-code.html#stucki-dithering) between JavaScript and WebAssembly generated from C++, D, Rust and Zig.
 
 ## JavaScript Dependencies
 
