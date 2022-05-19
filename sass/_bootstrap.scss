@@ -21,7 +21,19 @@
 // @import "~bootstrap/containers";
 // @import "~bootstrap/grid";
 // @import "~bootstrap/tables";
-@import "~bootstrap/forms";
+// @import "~bootstrap/forms";
+
+// contents of /forms
+@import "~bootstrap/forms/labels";
+// @import "~bootstrap/forms/form-text";
+@import "~bootstrap/forms/form-control";
+@import "~bootstrap/forms/form-select";
+// @import "~bootstrap/forms/form-check";
+// @import "~bootstrap/forms/form-range";
+// @import "~bootstrap/forms/floating-labels";
+// @import "~bootstrap/forms/input-group";
+// @import "~bootstrap/forms/validation";
+
 @import "~bootstrap/buttons";
 // @import "~bootstrap/transitions";
 // @import "~bootstrap/dropdown";
@@ -47,8 +59,8 @@
 // @import "~bootstrap/placeholders";
 
 // Helpers
-@import "~bootstrap/helpers";
+// @import "~bootstrap/helpers";
 
 // Utilities
-@import "~bootstrap/utilities/api";
+// @import "~bootstrap/utilities/api";
 // scss-docs-end import-stack
