@@ -53,13 +53,15 @@
                 :class="$style.performanceResults"
             >
                 <h2>{{ resultsLanguage }} Performance <span :class="$style.performanceUnits">(Megapixels per second)</span></h2>
-                <p 
-                    v-for="(timeElapsed, i) in resultsStats.times"
-                    :key="i"
-                    :class="$style.resultTime"
-                >
-                    {{ (imageMegapixels / timeElapsed).toFixed(2) }}
-                </p>
+                <ol>
+                    <li 
+                        v-for="(timeElapsed, i) in resultsStats.times"
+                        :key="i"
+                        :class="$style.resultTime"
+                    >
+                        {{ (imageMegapixels / timeElapsed).toFixed(2) }}
+                    </li>
+                </ol>
             </div>
         </div>
         <div>
@@ -114,6 +116,7 @@
 
 .resultTime {
     margin: 0;
+    padding: 0 0 0 0.5em;
 }
 </style>
 
