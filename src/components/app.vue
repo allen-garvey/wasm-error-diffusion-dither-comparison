@@ -24,8 +24,8 @@
                         >
                             <option 
                                 v-for="option in ditherDropdownModel"
-                                :key="option.value"
-                                :value="option.value"
+                                :key="option.key"
+                                :value="option.key"
                             >
                                 {{ option.title }}
                             </option>
@@ -122,7 +122,7 @@
 
 <script>
 import messageHeaders from '../message-headers';
-import ditherDropdownModel from '../dom/dither-dropdown-model';
+import ditherDropdownModel from '../dither-model';
 import Canvas from '../dom/canvas';
 
 export default {
@@ -143,7 +143,7 @@ export default {
             imageHeight: 0,
             canvasContext: null,
             ditherWorker: null,
-            ditherLanguage: ditherDropdownModel[0].value,
+            ditherLanguage: ditherDropdownModel[0].key,
             isWorkerBusy: false,
             resultsStats: null,
         };
@@ -161,7 +161,7 @@ export default {
         resultsLanguage(){
             for(let i=0;i<ditherDropdownModel.length;i++){
                 const model = ditherDropdownModel[i];
-                if(this.resultsStats.language === model.value){
+                if(this.resultsStats.language === model.key){
                     return model.title;
                 }
             }

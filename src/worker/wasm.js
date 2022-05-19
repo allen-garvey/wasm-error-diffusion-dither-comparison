@@ -1,6 +1,6 @@
-import wasmDropdownModel from '../dom/dither-dropdown-model';
+import ditherModel from '../dither-model';
 
-const wasmModel = wasmDropdownModel.filter(model => model.source);
+const wasmModel = ditherModel.filter(model => model.source);
 
 const compileStreaming = (url, memo, key) => WebAssembly.compileStreaming(fetch(url))
     .then(module => {
@@ -20,7 +20,7 @@ const compileStreamingPolyFill = (url, memo, key) => fetch(url)
 
 const initializeWasm = (memo) => {
     const compileFunc = WebAssembly.compileStreaming ? compileStreaming : compileStreamingPolyFill;
-    return Promise.all(wasmModel.map(({value, source}) => compileFunc(`/assets/${source}.wasm`, memo, value)));
+    return Promise.all(wasmModel.map(({key, source}) => compileFunc(`/assets/${source}.wasm`, memo, key)));
 }
 
 const instantiateWasm = (memo, imageWidth, imageHeight) => {
