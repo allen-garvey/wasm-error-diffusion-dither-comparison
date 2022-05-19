@@ -2,14 +2,26 @@ import wasmDropdownModel from '../dom/dither-dropdown-model';
 
 const wasmModel = wasmDropdownModel.filter(model => model.source);
 
-const initializeWasm = (memo) => Promise.all(wasmModel.map(({value, source}) =>
-    WebAssembly.compileStreaming(fetch(`/assets/${source}.wasm`))
-        .then(module => {
-            memo[value] = {
-                module,
-            };
-        })
-));
+const compileStreaming = (url, memo, key) => WebAssembly.compileStreaming(fetch(url))
+    .then(module => {
+        memo[key] = {
+            module,
+        };
+    });
+
+const compileStreamingPolyFill = (url, memo, key) => fetch(url)
+    .then(response => response.arrayBuffer())
+    .then(bytes => WebAssembly.compile(bytes))
+    .then(module => {
+        memo[key] = {
+            module,
+        };
+    });
+
+const initializeWasm = (memo) => {
+    const compileFunc = WebAssembly.compileStreaming ? compileStreaming : compileStreamingPolyFill;
+    return Promise.all(wasmModel.map(({value, source}) => compileFunc(`/assets/${source}.wasm`, memo, value)));
+}
 
 const instantiateWasm = (memo, imageWidth, imageHeight) => {
     const PAGE_SIZE_IN_BYTES = 64 * 1024;
