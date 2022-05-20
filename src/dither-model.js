@@ -6,6 +6,11 @@ export default [
         key: messageHeaders.DITHER_JS,
     },
     {
+        title: 'AssemblyScript',
+        key: messageHeaders.DITHER_ASC,
+        source: 'asc',
+    },
+    {
         title: 'C++',
         key: messageHeaders.DITHER_CPP,
         source: 'cpp',

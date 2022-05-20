@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --config webpack.config.js",
     "build": "webpack --config webpack.config.js",
-    "deploy": "webpack --config webpack.config.js --mode='production'"
+    "deploy": "webpack --config webpack.config.js --mode='production'",
+    "compile:asc": "asc wasm/asc/index.ts --target release"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.2.33",
+    "assemblyscript": "^0.20.6",
     "css-loader": "^6.7.1",
     "mini-css-extract-plugin": "^2.6.0",
     "node-sass": "^7.0.1",

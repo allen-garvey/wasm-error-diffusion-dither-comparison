@@ -1,0 +1,25 @@
+{
+    "entries": [
+        "./wasm/asc/index.ts"
+    ],
+    "targets": {
+      "debug": {
+        "outFile": "public/assets/asc-debug.wasm",
+        "textFile": "public/assets/asc-debug.wat",
+        "sourceMap": true,
+        "debug": true
+      },
+      "release": {
+        "outFile": "wasm/asc/build/asc.wasm",
+        "textFile": "wasm/asc/build/asc.wat",
+        "sourceMap": false,
+        "optimizeLevel": 3,
+        "shrinkLevel": 2,
+        "converge": true,
+        "noAssert": true
+      }
+    },
+    "options": {
+      "bindings": "esm"
+    }
+  }

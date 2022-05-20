@@ -37,6 +37,7 @@ wasm/zig/zig-cache/*
 public/assets/*.js
 public/assets/*.css
 wasm/rust/target/*
+wasm/assemblyscript/build/*
 
 # Env variables
 .env
