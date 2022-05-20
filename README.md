@@ -41,4 +41,4 @@ A comparison of error diffusion dither performance using the [Stucki error diffu
 
 ## License
 
-WASM Error Propagation Dither Comparison is released under the MIT License. See license.txt for more details.
+WASM Error Diffusion Dither Comparison is released under the MIT License. See license.txt for more details.
