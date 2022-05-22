@@ -39,6 +39,13 @@ A comparison of error diffusion dither performance using the [Stucki error diffu
 * Make sure you have all WebAssembly dependencies installed
 * `make`
 
+## Docker
+
+Alternatively you can run using Docker (x86-64 architecture only)
+
+* `docker build -t wasm-dither .`
+* `docker run -p 3000:3000 wasm-dither`
+
 ## License
 
 WASM Error Diffusion Dither Comparison is released under the MIT License. See license.txt for more details.

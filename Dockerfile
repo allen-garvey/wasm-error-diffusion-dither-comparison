@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 RUN apt update && apt-get install -y \
+    build-essential \
     curl \
     bzip2 \
     binaryen \
@@ -8,7 +9,8 @@ RUN apt update && apt-get install -y \
     libxml2 \
     xz-utils \
     python3 \
-    nodejs
+    nodejs \
+    npm
 
 # create download directory
 RUN mkdir -p $HOME/downloads
@@ -24,7 +26,6 @@ RUN tar -xf $HOME/downloads/emcc -C $HOME
 RUN ls $HOME
 RUN $HOME/emsdk-3.1.10/emsdk install latest
 RUN $HOME/emsdk-3.1.10/emsdk activate latest
-RUN source $HOME/emsdk-3.1.10/emsdk_env.sh
 ENV PATH="/root/emsdk-3.1.10/upstream/emscripten:$PATH"
 
 # install Rust & wasm-pack
@@ -49,7 +50,8 @@ ADD package.json .
 ADD package-lock.json .
 RUN npm install
 
-# add js / sass files
+# add html / js / sass files
+ADD public/index.html ./public
 RUN mkdir sass && mkdir src
 ADD sass ./sass
 ADD src ./src
