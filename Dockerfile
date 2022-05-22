@@ -1,7 +1,9 @@
 FROM ubuntu:22.04
-RUN apt update && apt-get -y install \
+RUN apt update && apt-get install -y \
     curl \
     bzip2 \
+    binaryen \
+    llvm \
     make \
     libxml2 \
     xz-utils \
@@ -21,6 +23,8 @@ RUN curl -s -L https://github.com/emscripten-core/emsdk/archive/refs/tags/3.1.10
 RUN tar -xf $HOME/downloads/emcc -C $HOME
 RUN ls $HOME
 RUN $HOME/emsdk-3.1.10/emsdk install latest
+RUN $HOME/emsdk-3.1.10/emsdk activate latest
+RUN source $HOME/emsdk-3.1.10/emsdk_env.sh
 ENV PATH="/root/emsdk-3.1.10/upstream/emscripten:$PATH"
 
 # install Rust & wasm-pack
