@@ -190,6 +190,7 @@ export default {
         imageLoaded(){
             this.imageWidth = this.$refs.image.width;
 			this.imageHeight = this.$refs.image.height;
+            this.resultsStats = null;
 			
 			//turn image into arrayBuffer by drawing it and then getting it from canvas
 			Canvas.clear(this.canvasContext);
