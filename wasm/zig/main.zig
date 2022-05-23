@@ -19,10 +19,10 @@ fn calculateLightness(r: u8, g: u8, b: u8) f32{
 
     var pixelIndex: usize = 0;
 
-    var y: i32 = 0;
+    var y: u32 = 0;
     while (y < imageHeight) : (y += 1) {
         var errorIndex: usize = 2;
-        var x: i32 = 0;
+        var x: u32 = 0;
         
         while (x < imageWidth) : (x += 1) {
             const storedError: f32 = errorRow1[errorIndex];
