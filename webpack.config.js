@@ -29,6 +29,10 @@ module.exports = {
         historyApiFallback: {
             index: 'index.html'
         },
+        // following required for docker
+        // https://www.okteto.com/docs/tutorials/webpack/
+        host: '0.0.0.0',
+        allowedHosts: 'all',
     },
     resolve: {
         alias: {
