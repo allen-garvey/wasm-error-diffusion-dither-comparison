@@ -27,7 +27,7 @@ A comparison of error diffusion dither performance using the [Stucki error diffu
 
 ### Zig
 
-* [zig](https://ziglang.org/download/) 0.9.1
+* [zig](https://ziglang.org/download/) 0.12.0
 
 ## Getting Started
 

@@ -26,7 +26,7 @@ $(D_WASM_OUTPUT): $(D_SRC)
 	ldc2 -mtriple=wasm32-unknown-unknown-wasm -betterC --release -O $(D_SRC) -of=$(D_WASM_OUTPUT) -od=$(D_SRC_DIR)
 
 $(ZIG_WASM_OUTPUT): $(ZIG_SRC)
-	zig build-lib $(ZIG_SRC) -dynamic -O ReleaseSmall -target wasm32-freestanding
+	zig build-lib $(ZIG_SRC) -dynamic -O ReleaseSmall -rdynamic -target wasm32-freestanding
 	mv ./main.wasm $(ZIG_WASM_OUTPUT)
 
 $(RUST_WASM_OUTPUT): $(RUST_SRC)
