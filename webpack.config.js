@@ -5,10 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: [
-            `${__dirname}/src/index.js`, 
-            `${__dirname}/sass/style.scss`,
-        ],
+    entry: [`${__dirname}/src/index.js`, `${__dirname}/sass/style.scss`],
     output: {
         filename: 'app.js',
         path: path.resolve(__dirname, 'public/assets'),
@@ -19,15 +16,17 @@ module.exports = {
             watch: true,
         },
         devMiddleware: {
-            publicPath: '/assets/'
+            publicPath: '/assets/',
         },
         port: 3000,
         open: true,
         client: {
-            overlay: {},
+            overlay: {
+                warnings: false,
+            },
         },
         historyApiFallback: {
-            index: 'index.html'
+            index: 'index.html',
         },
         // following required for docker
         // https://www.okteto.com/docs/tutorials/webpack/
@@ -43,7 +42,7 @@ module.exports = {
         rules: [
             {
                 test: /\.vue$/,
-                loader: 'vue-loader'
+                loader: 'vue-loader',
             },
             {
                 test: /\.scss$/,
@@ -58,14 +57,15 @@ module.exports = {
                                 options: {
                                     esModule: false,
                                     modules: {
-                                        localIdentName: '[local]_[hash:base64:8]',
+                                        localIdentName:
+                                            '[local]_[hash:base64:8]',
                                     },
-                                }
+                                },
                             },
                             {
                                 loader: 'sass-loader',
                             },
-                        ]
+                        ],
                     },
                     {
                         use: [
@@ -74,11 +74,11 @@ module.exports = {
                             },
                             'css-loader',
                             'sass-loader',
-                        ]
+                        ],
                     },
                 ],
             },
-        ]
+        ],
     },
     plugins: [
         new VueLoaderPlugin(),
