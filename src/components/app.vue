@@ -2,19 +2,27 @@
     <div :class="$style.container">
         <div v-if="!isLoading">
             <h2>Open an image</h2>
-            <p>Your image file will remain on your computer and will not be uploaded or shared with anyone.</p>
+            <p>
+                Your image file will remain on your computer and will not be
+                uploaded or shared with anyone.
+            </p>
             <div :class="$style.controls">
-                <input 
-                    type="file" 
+                <input
+                    type="file"
                     accept="image/png,image/gif,image/jpeg,image/webp"
                     @change.prevent="fileLoaded"
                     :disabled="isWorkerBusy"
                     class="form-control"
                     :class="[$style.formInput, $style.fileInput]"
                 />
-                <div :class="$style.ditherControlsContainer" v-if="isImageLoaded">
+                <div
+                    :class="$style.ditherControlsContainer"
+                    v-if="isImageLoaded"
+                >
                     <div :class="$style.languageSelectContainer">
-                        <label class="form-label" for="language-select-dropdown">Language</label>
+                        <label class="form-label" for="language-select-dropdown"
+                            >Language</label
+                        >
                         <select
                             v-model="ditherLanguage"
                             :disabled="isWorkerBusy"
@@ -22,7 +30,7 @@
                             :class="$style.formInput"
                             id="language-select-dropdown"
                         >
-                            <option 
+                            <option
                                 v-for="option in ditherDropdownModel"
                                 :key="option.key"
                                 :value="option.key"
@@ -48,13 +56,15 @@
                 @load.prevent="imageLoaded"
                 :src="currentImageObjectUrl || ''"
             />
-            <div 
-                v-if="resultsStats"
-                :class="$style.performanceResults"
-            >
-                <h2>{{ resultsLanguage }} Performance <span :class="$style.performanceUnits">(Megapixels per second)</span></h2>
+            <div v-if="resultsStats" :class="$style.performanceResults">
+                <h2>
+                    {{ resultsLanguage }} Performance
+                    <span :class="$style.performanceUnits"
+                        >(Megapixels per second)</span
+                    >
+                </h2>
                 <ol>
-                    <li 
+                    <li
                         v-for="(timeElapsed, i) in resultsStats.times"
                         :key="i"
                         :class="$style.resultTime"
@@ -65,10 +75,7 @@
             </div>
         </div>
         <div>
-            <canvas 
-                ref="outputCanvas"
-            >
-            </canvas>
+            <canvas ref="outputCanvas"> </canvas>
         </div>
     </div>
 </template>
@@ -126,16 +133,18 @@ import ditherDropdownModel from '../dither-model';
 import Canvas from '../dom/canvas';
 
 export default {
-    components: {
-    },
-    created(){
-        this.ditherWorker = new Worker(new URL('../worker/worker.js', import.meta.url));
+    components: {},
+    created() {
+        this.ditherWorker = new Worker(
+            new URL('../worker/worker.js', import.meta.url),
+            { type: 'module' }
+        );
         this.ditherWorker.onmessage = this.onWorkerMessageReceived;
     },
-    mounted(){
+    mounted() {
         this.canvasContext = this.$refs.outputCanvas.getContext('2d');
     },
-    data(){
+    data() {
         return {
             isLoading: true,
             currentImageObjectUrl: null,
@@ -149,63 +158,79 @@ export default {
         };
     },
     computed: {
-        ditherDropdownModel(){
+        ditherDropdownModel() {
             return ditherDropdownModel;
         },
-        isImageLoaded(){
+        isImageLoaded() {
             return !!this.currentImageObjectUrl;
         },
-        imageMegapixels(){
-            return this.imageHeight * this.imageWidth / 1000000;
+        imageMegapixels() {
+            return (this.imageHeight * this.imageWidth) / 1000000;
         },
-        resultsLanguage(){
-            for(let i=0;i<ditherDropdownModel.length;i++){
+        resultsLanguage() {
+            for (let i = 0; i < ditherDropdownModel.length; i++) {
                 const model = ditherDropdownModel[i];
-                if(this.resultsStats.language === model.key){
+                if (this.resultsStats.language === model.key) {
                     return model.title;
                 }
             }
         },
     },
     watch: {
-        ditherLanguage(){
+        ditherLanguage() {
             this.dither();
         },
     },
     methods: {
-        fileLoaded(e){
+        fileLoaded(e) {
             const files = e.target.files;
-			if(files.length < 1){
-				return window.alert('No files selected');
-			}
-			const file = files[0];
-			if(!file.type.startsWith('image/')){
-				return window.alert(`${file.name} appears to be of type ${file.type} rather than an image`);
-			}
-			if(this.currentImageObjectUrl){
-				URL.revokeObjectURL(this.currentImageObjectUrl);
-			}
-			this.currentImageObjectUrl = URL.createObjectURL(file);
+            if (files.length < 1) {
+                return window.alert('No files selected');
+            }
+            const file = files[0];
+            if (!file.type.startsWith('image/')) {
+                return window.alert(
+                    `${file.name} appears to be of type ${file.type} rather than an image`
+                );
+            }
+            if (this.currentImageObjectUrl) {
+                URL.revokeObjectURL(this.currentImageObjectUrl);
+            }
+            this.currentImageObjectUrl = URL.createObjectURL(file);
         },
-        imageLoaded(){
+        imageLoaded() {
             this.imageWidth = this.$refs.image.width;
-			this.imageHeight = this.$refs.image.height;
+            this.imageHeight = this.$refs.image.height;
             this.resultsStats = null;
-			
-			//turn image into arrayBuffer by drawing it and then getting it from canvas
-			Canvas.clear(this.canvasContext);
-			Canvas.loadImage(this.$refs.outputCanvas, this.canvasContext, this.$refs.image);
-            const pixels = new Uint8ClampedArray(this.canvasContext.getImageData(0, 0, this.imageWidth, this.imageHeight).data.buffer);
-			this.ditherWorker.postMessage({
-                type: messageHeaders.IMAGE_LOAD,
-                width: this.imageWidth,
-                height: this.imageHeight,
-                pixels,
-            }, [pixels.buffer]);
+
+            //turn image into arrayBuffer by drawing it and then getting it from canvas
+            Canvas.clear(this.canvasContext);
+            Canvas.loadImage(
+                this.$refs.outputCanvas,
+                this.canvasContext,
+                this.$refs.image
+            );
+            const pixels = new Uint8ClampedArray(
+                this.canvasContext.getImageData(
+                    0,
+                    0,
+                    this.imageWidth,
+                    this.imageHeight
+                ).data.buffer
+            );
+            this.ditherWorker.postMessage(
+                {
+                    type: messageHeaders.IMAGE_LOAD,
+                    width: this.imageWidth,
+                    height: this.imageHeight,
+                    pixels,
+                },
+                [pixels.buffer]
+            );
             this.isWorkerBusy = true;
         },
-        dither(){
-            if(this.isWorkerBusy){
+        dither() {
+            if (this.isWorkerBusy) {
                 return;
             }
             this.isWorkerBusy = true;
@@ -213,25 +238,31 @@ export default {
                 type: this.ditherLanguage,
             });
         },
-        onDitherResultsReceived(results){
-            Canvas.draw(this.canvasContext, this.imageWidth, this.imageHeight, results.pixels);
+        onDitherResultsReceived(results) {
+            Canvas.draw(
+                this.canvasContext,
+                this.imageWidth,
+                this.imageHeight,
+                results.pixels
+            );
             this.updateResultsStats(results);
             this.isWorkerBusy = false;
         },
-        updateResultsStats(results){
-            if(!this.resultsStats || this.resultsStats.language !== results.language){
+        updateResultsStats(results) {
+            if (
+                !this.resultsStats ||
+                this.resultsStats.language !== results.language
+            ) {
                 this.resultsStats = {
                     language: results.language,
-                    times: [
-                        results.timeElapsed,
-                    ],
+                    times: [results.timeElapsed],
                 };
                 return;
             }
             this.resultsStats.times.push(results.timeElapsed);
         },
-        onWorkerMessageReceived(event){
-            switch(event.data.type){
+        onWorkerMessageReceived(event) {
+            switch (event.data.type) {
                 case messageHeaders.WORKER_READY:
                     this.isLoading = false;
                     break;
@@ -244,6 +275,6 @@ export default {
                     break;
             }
         },
-    }
+    },
 };
 </script>
